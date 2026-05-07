@@ -17,9 +17,20 @@ import {
   Activity,
   CheckCircle2
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect } from "react";
 
 export default function App() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const WHATSAPP_NUMBER = "5554996224098";
   const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=Ol%C3%A1!%20Preciso%20de%20atendimento%20emergencial.`;
   const getServiceWppLink = (serviceName: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá! Gostaria de solicitar um orçamento para o serviço de ${serviceName}.`)}`;
@@ -28,42 +39,67 @@ export default function App() {
     <div className="min-h-screen bg-brand-dark text-slate-200 font-sans selection:bg-brand-neon selection:text-brand-dark overflow-hidden">
       
       {/* Navbar */}
-      <nav className="fixed w-full z-50 top-0 border-b border-white/5 bg-brand-dark/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-brand-primary to-brand-neon flex items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
-              <Zap size={20} className="text-white sm:w-6 sm:h-6" />
-            </div>
-            <div className="font-display font-bold text-lg sm:text-xl tracking-tight text-white flex flex-col leading-none">
-              <span>CR Serviços</span>
-              <span className="text-brand-neon text-xs sm:text-sm font-medium">Gerais</span>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#servicos" className="hover:text-brand-neon transition-colors">Serviços</a>
-            <a href="#diferenciais" className="hover:text-brand-neon transition-colors">Diferenciais</a>
-            <div className="flex items-center gap-2 text-brand-neon">
-              <Clock size={16} />
-              <span>Plantão 24h</span>
-            </div>
-          </div>
-
-          <a 
-            href={wppLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative px-4 sm:px-6 py-2 sm:py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center gap-2 overflow-hidden shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] text-sm sm:text-base"
+      <AnimatePresence>
+        {!isScrolled ? (
+          <motion.nav 
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed w-full z-50 top-0 bg-brand-dark/80 backdrop-blur-md"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-            <MessageCircle size={18} className="relative z-10" />
-            <span className="relative z-10 hidden sm:inline">WhatsApp Agora</span>
-          </a>
-        </div>
-      </nav>
+            <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 sm:h-24 flex items-center justify-between">
+              <div className="flex items-center">
+                <img 
+                  src="https://digital-aquamarine-xh1rdgywf1.edgeone.app/logo-cr.png" 
+                  alt="CR Serviços Gerais" 
+                  className="h-16 sm:h-20 object-contain scale-110 origin-left"
+                />
+              </div>
+
+              <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#servicos" className="hover:text-brand-neon transition-colors">Serviços</a>
+                <a href="#diferenciais" className="hover:text-brand-neon transition-colors">Diferenciais</a>
+                <div className="flex items-center gap-2 text-brand-neon">
+                  <Clock size={16} />
+                  <span>Plantão 24h</span>
+                </div>
+              </div>
+
+              <a 
+                href={wppLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative px-4 sm:px-6 py-2 sm:py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center gap-2 overflow-hidden shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] text-sm sm:text-base"
+              >
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <MessageCircle size={18} className="relative z-10" />
+                <span className="relative z-10 hidden sm:inline">WhatsApp Agora</span>
+              </a>
+            </div>
+          </motion.nav>
+        ) : (
+          <motion.nav
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed w-full z-50 top-4 flex justify-center pointer-events-none"
+          >
+            <div className="bg-brand-dark/95 pointer-events-auto backdrop-blur-md rounded-full border border-white/10 shadow-2xl px-6 md:px-8 h-14 flex items-center justify-center gap-6 md:gap-8 max-w-[95%]">
+              <a href="#servicos" className="text-sm font-medium hover:text-brand-neon transition-colors">Serviços</a>
+              <a href="#diferenciais" className="text-sm font-medium hover:text-brand-neon transition-colors">Diferenciais</a>
+              <div className="flex items-center gap-2 text-brand-neon text-sm font-medium whitespace-nowrap">
+                <Clock size={16} />
+                <span>Plantão 24h</span>
+              </div>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 md:pt-52 md:pb-32 px-4">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-4">
         {/* Background Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary/20 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-neon/10 blur-[100px] rounded-full pointer-events-none" />
@@ -307,25 +343,25 @@ export default function App() {
         </div>
 
         {/* Carousel Row 1 */}
-        <div className="flex whitespace-nowrap animate-marquee-slow hover:[animation-play-state:paused] mb-6 relative z-10">
+        <div className="flex w-max animate-marquee-slow hover:[animation-play-state:paused] mb-6 relative z-10">
           {[...Array(2)].map((_, groupIdx) => (
-            <div key={`row1-${groupIdx}`} className="flex items-center gap-6 px-3">
-              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop" alt="Eletricista de Cinto" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="Trabalho Hidráulico" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop" alt="Ferramentas Manutenção" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="Quadro Elétrico" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+            <div key={`row1-${groupIdx}`} className="flex items-center gap-6 px-3 shrink-0">
+              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop" alt="Eletricista de Cinto" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="Trabalho Hidráulico" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop" alt="Ferramentas Manutenção" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="Quadro Elétrico" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
             </div>
           ))}
         </div>
 
         {/* Carousel Row 2 */}
-        <div className="flex whitespace-nowrap animate-marquee-reverse hover:[animation-play-state:paused] relative z-10">
+        <div className="flex w-max animate-marquee-reverse hover:[animation-play-state:paused] relative z-10">
           {[...Array(2)].map((_, groupIdx) => (
-            <div key={`row2-${groupIdx}`} className="flex items-center gap-6 px-3">
-              <img src="https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop" alt="Reparo Placa" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop" alt="Instalação Comercial" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop" alt="Verificação Tensão" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop" alt="Bancada Equipamentos" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+            <div key={`row2-${groupIdx}`} className="flex items-center gap-6 px-3 shrink-0">
+              <img src="https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop" alt="Reparo Placa" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop" alt="Instalação Comercial" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop" alt="Verificação Tensão" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop" alt="Bancada Equipamentos" className="w-72 md:w-96 shrink-0 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
             </div>
           ))}
         </div>
@@ -402,23 +438,24 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-black/60 pt-16 pb-8 px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
-          <div>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded shrink-0 bg-brand-primary flex items-center justify-center">
-                <Zap size={18} className="text-white" />
-              </div>
-              <span className="font-display font-bold text-xl text-white">CR Serviços Gerais</span>
+      <footer className="border-t border-white/5 bg-[#0a0f16] pt-16 pb-8 px-4 sm:pt-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 mb-12">
+          <div className="flex flex-col items-start">
+            <div className="mb-6 w-full">
+              <img 
+                src="https://digital-aquamarine-xh1rdgywf1.edgeone.app/logo-cr.png" 
+                alt="CR Serviços Gerais" 
+                className="h-16 sm:h-20 w-auto object-contain drop-shadow-md"
+              />
             </div>
-            <p className="text-slate-400 max-w-xs">
+            <p className="text-slate-400 max-w-sm text-sm sm:text-base leading-relaxed">
               Sua equipe de confiança para manutenções elétricas e hidráulicas. Atendimento premium e garantia de qualidade.
             </p>
           </div>
           
           <div>
-            <h4 className="text-white font-bold mb-6 font-display">Links Rápidos</h4>
-            <div className="flex flex-col gap-3 text-slate-400">
+            <h4 className="text-white font-bold mb-6 font-display text-lg">Links Rápidos</h4>
+            <div className="flex flex-col gap-4 text-slate-400">
               <a href="#servicos" className="hover:text-brand-neon transition-colors w-fit">Nossos Serviços</a>
               <a href="#diferenciais" className="hover:text-brand-neon transition-colors w-fit">Por que nos escolher?</a>
               <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-neon transition-colors w-fit">Solicitar Orçamento</a>
@@ -426,25 +463,29 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 font-display">Contato 24 Horas</h4>
-            <div className="flex flex-col gap-4">
+            <h4 className="text-white font-bold mb-6 font-display text-lg">Contato 24 Horas</h4>
+            <div className="flex flex-col gap-5">
               <div className="flex items-center gap-3 text-slate-300">
-                <MessageCircle size={18} className="text-[#25D366]" />
-                <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">(54) 99622-4098</a>
+                <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center shrink-0">
+                  <MessageCircle size={20} className="text-[#25D366]" />
+                </div>
+                <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
-                <Phone size={18} className="text-brand-primary" />
-                <a href="tel:5554996224098" className="hover:text-white transition-colors">(54) 99622-4098</a>
+                <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center shrink-0">
+                  <Phone size={20} className="text-brand-primary" />
+                </div>
+                <a href="tel:5554996224098" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
               </div>
-              <div className="flex items-center gap-3 text-slate-300 mt-2 p-3 bg-white/5 rounded-lg border border-white/5 w-fit">
-                <Clock size={18} className="text-brand-neon" />
-                <span>Atendimento 24h / 7 dias</span>
+              <div className="flex items-center gap-3 text-brand-neon mt-2 p-3 bg-brand-neon/5 rounded-xl border border-brand-neon/10 w-fit">
+                <Clock size={20} />
+                <span className="font-medium">Atendimento 24h / 7 dias</span>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 text-center md:text-left">
           <p>© {new Date().getFullYear()} CR Serviços Gerais. Todos os direitos reservados.</p>
           <p>Feito para alta performance e conversão.</p>
         </div>
