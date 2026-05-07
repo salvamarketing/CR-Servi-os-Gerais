@@ -28,14 +28,14 @@ export default function App() {
       
       {/* Navbar */}
       <nav className="fixed w-full z-50 top-0 border-b border-white/5 bg-brand-dark/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 sm:h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-primary to-brand-neon flex items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
-              <Zap size={24} className="text-white" />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-brand-primary to-brand-neon flex items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+              <Zap size={20} className="text-white sm:w-6 sm:h-6" />
             </div>
-            <div className="font-display font-bold text-xl tracking-tight text-white flex flex-col leading-none">
+            <div className="font-display font-bold text-lg sm:text-xl tracking-tight text-white flex flex-col leading-none">
               <span>CR Serviços</span>
-              <span className="text-brand-neon text-sm font-medium">Gerais</span>
+              <span className="text-brand-neon text-xs sm:text-sm font-medium">Gerais</span>
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export default function App() {
             href={wppLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center gap-2 overflow-hidden shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)]"
+            className="group relative px-4 sm:px-6 py-2 sm:py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center gap-2 overflow-hidden shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] text-sm sm:text-base"
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
             <MessageCircle size={18} className="relative z-10" />
@@ -62,7 +62,7 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 md:pt-52 md:pb-32 px-4">
+      <section className="relative pt-32 pb-16 md:pt-52 md:pb-32 px-4">
         {/* Background Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary/20 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-neon/10 blur-[100px] rounded-full pointer-events-none" />
@@ -73,9 +73,9 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-6 md:gap-8"
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
               Problemas Elétricos ou <br className="hidden md:block"/> Hidráulicos? <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow">
                 Resolvemos Hoje Mesmo.
@@ -92,7 +92,7 @@ export default function App() {
                 href={wppLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-4 bg-brand-primary hover:bg-green-500 text-white rounded-lg font-medium text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(29,78,216,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] group"
+                className="w-full sm:w-auto px-8 py-4 bg-brand-primary hover:bg-green-500 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(29,78,216,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] group"
               >
                 <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
                 Chamar no WhatsApp
@@ -100,14 +100,14 @@ export default function App() {
               
               <a 
                 href="tel:5511999999999"
-                className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium text-lg transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
+                className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
               >
                 <PhoneCall size={20} />
                 Solicitar Atendimento
               </a>
             </div>
 
-            <div className="flex flex-wrap items-center gap-6 mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-4 md:mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
                   {[1,2,3,4].map(i => (
@@ -153,10 +153,10 @@ export default function App() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute -right-4 top-1/4 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-2xl flex items-center gap-4 animate-float"
+              className="absolute -right-2 sm:-right-4 top-1/4 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-3 sm:p-4 rounded-xl shadow-2xl flex items-center gap-3 sm:gap-4 animate-float"
             >
-              <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                <Droplets size={24} className="text-blue-400" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                <Droplets size={20} className="text-blue-400 sm:w-6 sm:h-6" />
               </div>
               <div className="hidden sm:block">
                 <p className="text-white font-bold font-display leading-tight">Hidráulica</p>
@@ -169,10 +169,10 @@ export default function App() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="absolute -left-6 bottom-1/3 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-2xl flex items-center gap-4 animate-float-delayed"
+              className="absolute -left-2 sm:-left-6 bottom-1/3 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-3 sm:p-4 rounded-xl shadow-2xl flex items-center gap-3 sm:gap-4 animate-float-delayed"
             >
-              <div className="w-12 h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
-                <Zap size={24} className="text-brand-accent-yellow" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
+                <Zap size={20} className="text-brand-accent-yellow sm:w-6 sm:h-6" />
               </div>
               <div className="hidden sm:block">
                 <p className="text-white font-bold font-display leading-tight">Elétrica</p>
@@ -185,14 +185,14 @@ export default function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1 }}
-              className="absolute -bottom-8 right-8 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 flex items-center gap-4 animate-float-slow"
+              className="absolute -bottom-4 sm:-bottom-8 right-0 sm:right-8 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-3 sm:p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 flex items-center gap-3 sm:gap-4 animate-float-slow"
             >
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                <Clock size={24} className="text-white" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center">
+                <Clock size={20} className="text-white sm:w-6 sm:h-6" />
               </div>
               <div>
-                <p className="text-white font-bold font-display leading-tight text-lg">Emergência 24h</p>
-                <p className="text-red-100 text-sm font-medium">Equipe em 40 min</p>
+                <p className="text-white font-bold font-display leading-tight text-base sm:text-lg">Emergência 24h</p>
+                <p className="text-red-100 text-xs sm:text-sm font-medium">Equipe em 40 min</p>
               </div>
             </motion.div>
           </div>
@@ -293,7 +293,7 @@ export default function App() {
       </section>
 
       {/* Differentials / Why Choose Us */}
-      <section id="diferenciais" className="py-24 px-4 relative overflow-hidden">
+      <section id="diferenciais" className="py-16 md:py-24 px-4 relative overflow-hidden">
         {/* Wireframe background elements */}
         <div className="absolute -left-64 top-0 w-[500px] h-[500px] border border-white/5 rounded-full" />
         <div className="absolute -left-32 top-32 w-[500px] h-[500px] border border-white/5 rounded-full" />
