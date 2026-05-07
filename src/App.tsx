@@ -20,8 +20,9 @@ import {
 import { motion } from "motion/react";
 
 export default function App() {
-  const WHATSAPP_NUMBER = "5511999999999";
+  const WHATSAPP_NUMBER = "5554996224098";
   const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=Ol%C3%A1!%20Preciso%20de%20atendimento%20emergencial.`;
+  const getServiceWppLink = (serviceName: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá! Gostaria de solicitar um orçamento para o serviço de ${serviceName}.`)}`;
 
   return (
     <div className="min-h-screen bg-brand-dark text-slate-200 font-sans selection:bg-brand-neon selection:text-brand-dark overflow-hidden">
@@ -76,14 +77,14 @@ export default function App() {
             className="flex flex-col gap-6 md:gap-8"
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
-              Problemas Elétricos ou <br className="hidden md:block"/> Hidráulicos? <br/>
+              Problemas Hidráulicos ou <br className="hidden md:block"/> Elétricos? <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow">
                 Resolvemos Hoje Mesmo.
               </span>
             </h1>
 
             <p className="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed">
-              Equipe especializada em elétrica, encanamento e manutenção com atendimento 
+              Equipe especializada em encanamento, manutenção e elétrica com atendimento 
               <strong className="text-white font-medium"> rápido, profissional e emergencial</strong>.
             </p>
 
@@ -99,7 +100,7 @@ export default function App() {
               </a>
               
               <a 
-                href="tel:5511999999999"
+                href="tel:5554996224098"
                 className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
               >
                 <PhoneCall size={20} />
@@ -231,9 +232,9 @@ export default function App() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "Eletricista",
-                desc: "Reparos em quadros, curtos-circuitos, instalação de chuveiros, tomadas e projetos elétricos completos.",
-                icon: <Zap size={32} />
+                title: "Hidráulica",
+                desc: "Manutenção de bombas, caixas d'água, válvulas e sistemas complexos de distribuição.",
+                icon: <Droplets size={32} />
               },
               {
                 title: "Encanador",
@@ -241,14 +242,14 @@ export default function App() {
                 icon: <Wrench size={32} />
               },
               {
-                title: "Hidráulica",
-                desc: "Manutenção de bombas, caixas d'água, válvulas e sistemas complexos de distribuição.",
-                icon: <Droplets size={32} />
-              },
-              {
                 title: "Desentupimento",
                 desc: "Desobstrução rápida e limpa de pias, ralos, vasos sanitários e redes de esgoto.",
                 icon: <Activity size={32} />
+              },
+              {
+                title: "Eletricista",
+                desc: "Reparos em quadros, curtos-circuitos, instalação de chuveiros, tomadas e projetos elétricos completos.",
+                icon: <Zap size={32} />
               },
               {
                 title: "Manutenção Geral",
@@ -278,7 +279,7 @@ export default function App() {
                 <h3 className="text-xl font-bold text-white mb-3 font-display">{service.title}</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">{service.desc}</p>
                 
-                <a href={wppLink} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 font-medium text-sm transition-colors ${
+                <a href={getServiceWppLink(service.title)} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 font-medium text-sm transition-colors ${
                   service.highlight ? "text-brand-accent-red hover:text-white" : "text-slate-300 group-hover:text-brand-neon"
                 }`}>
                   Solicitar orçamento <ChevronRight size={16} />
@@ -289,6 +290,44 @@ export default function App() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Trabalhos Feitos / Portfolio Section */}
+      <section className="py-20 overflow-hidden bg-black/60 border-b border-white/5 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-brand-primary/5 blur-[120px] pointer-events-none" />
+        
+        <div className="mb-12 text-center max-w-2xl mx-auto px-4 relative z-10">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+            Trabalhos Realizados
+          </h2>
+          <p className="text-slate-400 text-lg">
+            Confira alguns dos nossos projetos e reparos executados com excelência.
+          </p>
+        </div>
+
+        {/* Carousel Row 1 */}
+        <div className="flex whitespace-nowrap animate-marquee-slow hover:[animation-play-state:paused] mb-6 relative z-10">
+          {[...Array(2)].map((_, groupIdx) => (
+            <div key={`row1-${groupIdx}`} className="flex items-center gap-6 px-3">
+              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop" alt="Eletricista de Cinto" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="Trabalho Hidráulico" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop" alt="Ferramentas Manutenção" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="Quadro Elétrico" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+            </div>
+          ))}
+        </div>
+
+        {/* Carousel Row 2 */}
+        <div className="flex whitespace-nowrap animate-marquee-reverse hover:[animation-play-state:paused] relative z-10">
+          {[...Array(2)].map((_, groupIdx) => (
+            <div key={`row2-${groupIdx}`} className="flex items-center gap-6 px-3">
+              <img src="https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop" alt="Reparo Placa" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop" alt="Instalação Comercial" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop" alt="Verificação Tensão" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+              <img src="https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop" alt="Bancada Equipamentos" className="w-72 md:w-96 aspect-video object-cover rounded-2xl shadow-xl border border-white/10" />
+            </div>
+          ))}
         </div>
       </section>
 
@@ -347,7 +386,7 @@ export default function App() {
               </a>
               
               <a 
-                href="tel:5511999999999"
+                href="tel:5554996224098"
                 className="w-full max-w-md px-6 py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
               >
                 <Phone size={24} />
@@ -391,11 +430,11 @@ export default function App() {
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3 text-slate-300">
                 <MessageCircle size={18} className="text-[#25D366]" />
-                <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">(11) 99999-9999</a>
+                <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">(54) 99622-4098</a>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <Phone size={18} className="text-brand-primary" />
-                <a href="tel:5511999999999" className="hover:text-white transition-colors">(11) 99999-9999</a>
+                <a href="tel:5554996224098" className="hover:text-white transition-colors">(54) 99622-4098</a>
               </div>
               <div className="flex items-center gap-3 text-slate-300 mt-2 p-3 bg-white/5 rounded-lg border border-white/5 w-fit">
                 <Clock size={18} className="text-brand-neon" />
