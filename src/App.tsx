@@ -18,10 +18,34 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const startDragging = (e: React.MouseEvent) => {
+    if (!carouselRef.current) return;
+    setIsDragging(true);
+    const startXValue = e.pageX;
+    setStartX(startXValue - carouselRef.current.offsetLeft);
+    setScrollLeft(carouselRef.current.scrollLeft);
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
+  };
+
+  const onDrag = (e: React.MouseEvent) => {
+    if (!isDragging || !carouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    carouselRef.current.scrollLeft = scrollLeft - walk;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -326,6 +350,60 @@ export default function App() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Trusted By / Partners Section */}
+      <section className="py-12 md:py-16 px-4 bg-brand-dark relative z-10">
+        <div className="max-w-7xl mx-auto text-center">
+          <h3 className="text-sm md:text-base font-bold text-slate-500 uppercase tracking-widest mb-8 md:mb-12">
+            Empresas que confiam na CR
+          </h3>
+          <div 
+            ref={carouselRef}
+            className="flex items-center gap-6 sm:gap-10 md:gap-12 overflow-x-auto pb-12 pt-6 scrollbar-hide cursor-grab active:cursor-grabbing max-w-full"
+            onMouseDown={startDragging}
+            onMouseLeave={stopDragging}
+            onMouseUp={stopDragging}
+            onMouseMove={onDrag}
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
+            {/* Adding padding elements to ensure we can scroll to the ends cleanly without cutting off */}
+            <div className="shrink-0 w-2 md:w-8" />
+            {[
+              { name: 'BYD', logo: 'https://images.seeklogo.com/logo-png/52/1/byd-atualizada-2024-logo-png_seeklogo-528892.png' },
+              { name: 'SJ Digital', logo: 'https://sjdigital.vtexassets.com/assets/vtex.file-manager-graphql/images/8a08118b-b9d2-4a56-9b88-07e6fd0fafde___fc645808f72b5b8376bff77ce8616416.png' },
+              { name: 'LOGO 3', logo: null },
+              { name: 'LOGO 4', logo: null },
+              { name: 'LOGO 5', logo: null },
+              { name: 'LOGO 6', logo: null },
+              { name: 'LOGO 7', logo: null },
+              { name: 'LOGO 8', logo: null },
+            ].map((partner, i) => (
+              <div 
+                key={i} 
+                className="shrink-0 relative group w-36 h-20 sm:w-48 sm:h-24 bg-white rounded-xl flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-[1.15] hover:shadow-[0_0_40px_rgba(0,229,255,0.2)] hover:z-20 transition-all duration-300 select-none"
+              >
+                <div className="absolute inset-0 bg-brand-neon/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md pointer-events-none" />
+                {partner.logo ? (
+                  <img src={partner.logo} alt={partner.name} draggable="false" className="relative z-10 max-w-full max-h-full object-contain drop-shadow-sm p-3 pointer-events-none" />
+                ) : (
+                  <span className="relative z-10 font-display font-bold text-slate-800 transition-colors text-center px-4 pointer-events-none">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            ))}
+            <div className="shrink-0 w-2 md:w-8" />
+          </div>
+          <style>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
         </div>
       </section>
 
