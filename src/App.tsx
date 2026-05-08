@@ -32,6 +32,89 @@ const Logo = ({ className }: { className?: string }) => {
 };
 
 
+const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse?: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const setRef = useRef<HTMLDivElement>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    const speed = 0.06; // pixels per ms
+
+    const scroll = (time: number) => {
+      const delta = Math.min(time - lastTime, 50);
+      lastTime = time;
+
+      if (containerRef.current && setRef.current && !isInteracting && !isDragging) {
+        const setWidth = setRef.current.offsetWidth;
+        
+        if (reverse) {
+          containerRef.current.scrollLeft -= speed * delta;
+          if (containerRef.current.scrollLeft <= 0) {
+            containerRef.current.scrollLeft += setWidth;
+          }
+        } else {
+          containerRef.current.scrollLeft += speed * delta;
+          if (containerRef.current.scrollLeft >= setWidth) {
+            containerRef.current.scrollLeft -= setWidth;
+          }
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isInteracting, isDragging, reverse]);
+
+  const handleDragStart = (clientX: number) => {
+    if (!containerRef.current) return;
+    setIsDragging(true);
+    setIsInteracting(true);
+    setStartX(clientX);
+    setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging || !containerRef.current) return;
+    const walk = (startX - clientX) * 2;
+    containerRef.current.scrollLeft = scrollLeft + walk;
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setIsInteracting(false);
+  };
+
+  return (
+    <div 
+      ref={containerRef}
+      className={`flex overflow-x-hidden cursor-grab active:cursor-grabbing w-full select-none relative z-10 mb-4 sm:mb-6 ${isDragging ? '' : 'transition-none'}`}
+      onMouseEnter={() => setIsInteracting(true)}
+      onMouseLeave={() => { setIsInteracting(false); setIsDragging(false); }}
+      onMouseDown={(e) => handleDragStart(e.pageX)}
+      onMouseMove={(e) => handleDragMove(e.pageX)}
+      onMouseUp={handleDragEnd}
+      onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+      onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+      onTouchEnd={handleDragEnd}
+    >
+      {[...Array(4)].map((_, i) => (
+        <div key={i} ref={i === 0 ? setRef : null} className="flex gap-4 sm:gap-6 shrink-0 pr-4 sm:pr-6">
+          {images.map((src, j) => (
+            <img key={j} src={src} draggable={false} alt="Trabalho Realizado" className="w-64 sm:w-80 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10 pointer-events-none" />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -65,6 +148,32 @@ export default function App() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Efeito de scroll suave para links âncora
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+      
+      if (anchor && anchor.hash && anchor.hash.startsWith('#') && anchor.origin === window.location.origin) {
+        e.preventDefault();
+        const element = document.querySelector(anchor.hash);
+        if (element) {
+          const navHeight = 100; // Compensar header fixo
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - navHeight;
+  
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
   const WHATSAPP_NUMBER = "5554996224098";
@@ -422,28 +531,25 @@ export default function App() {
         </div>
 
         {/* Carousel Row 1 */}
-        <div className="flex w-max animate-marquee-slow hover:[animation-play-state:paused] mb-4 sm:mb-6 relative z-10">
-          {[...Array(2)].map((_, groupIdx) => (
-            <div key={`row1-${groupIdx}`} className="flex items-center gap-4 sm:gap-6 px-2 sm:px-3 shrink-0">
-              <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop" alt="Eletricista de Cinto" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="Trabalho Hidráulico" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop" alt="Ferramentas Manutenção" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="Quadro Elétrico" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-            </div>
-          ))}
-        </div>
+        <InfiniteSlider 
+          images={[
+            "https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
+          ]} 
+        />
 
         {/* Carousel Row 2 */}
-        <div className="flex w-max animate-marquee-reverse hover:[animation-play-state:paused] relative z-10">
-          {[...Array(2)].map((_, groupIdx) => (
-            <div key={`row2-${groupIdx}`} className="flex items-center gap-4 sm:gap-6 px-2 sm:px-3 shrink-0">
-              <img src="https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop" alt="Reparo Placa" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop" alt="Instalação Comercial" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop" alt="Verificação Tensão" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-              <img src="https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop" alt="Bancada Equipamentos" className="w-56 sm:w-72 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
-            </div>
-          ))}
-        </div>
+        <InfiniteSlider 
+          reverse
+          images={[
+            "https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop"
+          ]} 
+        />
       </section>
 
       {/* Differentials / Why Choose Us */}
