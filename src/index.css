@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
   --color-brand-neon: #00e5ff;
   --color-brand-primary: #1d4ed8;
@@ -11,7 +11,7 @@
   --color-brand-accent-red: #ef4444;
   --color-brand-accent-yellow: #f59e0b;
 
-  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-glow: glow 4s ease-in-out infinite alternate;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-float: float 4s ease-in-out infinite;
   --animate-float-delayed: float 5s ease-in-out infinite reverse;
@@ -38,11 +38,16 @@
 
 @keyframes glow {
   from {
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.2), 0 0 20px rgba(0, 229, 255, 0.2), 0 0 30px rgba(0, 229, 255, 0.2);
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.15));
   }
   to {
-    text-shadow: 0 0 20px rgba(0, 229, 255, 0.6), 0 0 30px rgba(0, 229, 255, 0.4), 0 0 40px rgba(0, 229, 255, 0.4);
+    filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.35));
   }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
 }
 
 body {
