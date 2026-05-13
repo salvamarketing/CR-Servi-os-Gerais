@@ -198,8 +198,8 @@ export default function App() {
   }, []);
 
   const WHATSAPP_NUMBER = "5554996224098";
-  const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=Ol%C3%A1!%20Preciso%20de%20atendimento%20emergencial.`;
-  const getServiceWppLink = (serviceName: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá! Gostaria de solicitar um orçamento para o serviço de ${serviceName}.`)}`;
+  const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Vim através do site da CR e preciso de atendimento emergencial.")}`;
+  const getServiceWppLink = (serviceName: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá! Vim através do site da CR e gostaria de solicitar um orçamento para o serviço de ${serviceName}.`)}`;
 
   return (
     <div className="min-h-screen bg-brand-dark text-slate-200 font-sans selection:bg-brand-neon selection:text-brand-dark overflow-x-hidden">
@@ -262,7 +262,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section id="inicio" className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-4">
+      <section id="inicio" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-brand-primary/20 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute top-0 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-brand-neon/10 blur-[60px] md:blur-[100px] rounded-full pointer-events-none" />
@@ -347,8 +347,8 @@ export default function App() {
                   src={img} 
                   alt="Profissional Uniformizado" 
                   referrerPolicy="no-referrer"
-                  className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 ${
-                    idx === heroImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-[1.5s] ease-in-out ${
+                    idx === heroImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
                 />
               ))}
@@ -359,14 +359,14 @@ export default function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1 }}
-              className="absolute -bottom-2 sm:-bottom-8 right-2 sm:right-8 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-2.5 sm:p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 flex items-center gap-2.5 sm:gap-4 animate-float-slow scale-90 sm:scale-100 origin-bottom-right"
+              className="absolute -bottom-4 sm:-bottom-8 right-0 sm:right-8 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-2 sm:p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 flex items-center gap-2 sm:gap-4 animate-float-slow origin-bottom-right"
             >
               <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                 <Clock size={16} className="text-white sm:w-6 sm:h-6" />
               </div>
               <div>
-                <p className="text-white font-bold font-display leading-tight text-sm sm:text-lg">Emergência 24h</p>
-                <p className="text-red-100 text-[10px] sm:text-sm font-medium">Equipe em 40 min</p>
+                <p className="text-white font-bold font-display leading-tight text-xs sm:text-lg">Emergência 24h</p>
+                <p className="text-red-100 text-[10px] sm:text-sm font-medium">Equipe rápida</p>
               </div>
             </motion.div>
           </div>
