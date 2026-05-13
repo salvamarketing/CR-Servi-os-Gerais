@@ -106,7 +106,7 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
       {[...Array(4)].map((_, i) => (
         <div key={i} ref={i === 0 ? setRef : null} className="flex gap-4 sm:gap-6 shrink-0 pr-4 sm:pr-6">
           {images.map((src, j) => (
-            <img key={j} src={src} draggable={false} alt="Trabalho Realizado" className="w-64 sm:w-80 md:w-96 shrink-0 aspect-video object-cover rounded-xl sm:rounded-2xl shadow-xl border border-white/10 pointer-events-none" />
+            <img key={j} src={src} draggable={false} alt="Trabalho Realizado" referrerPolicy="no-referrer" className="w-[280px] h-[220px] sm:w-[400px] sm:h-[300px] md:w-[500px] md:h-[380px] shrink-0 object-cover rounded-xl sm:rounded-2xl shadow-xl pointer-events-none" />
           ))}
         </div>
       ))}
@@ -117,6 +117,27 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  const heroImages = [
+    "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7",
+    "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI",
+    "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr",
+    "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA",
+    "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5",
+    "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1",
+    "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam",
+    "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD",
+    "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -313,50 +334,24 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,102,255,0.2)] border border-brand-neon/20 group z-10"
+              className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,102,255,0.2)] group z-10"
             >
               {/* Dark CSS overlay for cinematic effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent z-10" />
               <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,102,255,0.4)] z-10 pointers-events-none mix-blend-overlay" />
               
-              {/* Professional Image Placeholder sourced from Unsplash (construction/electrician theme) */}
-              <img 
-                src="https://images.unsplash.com/photo-1621905252507-b35492d00cd9?q=80&w=2669&auto=format&fit=crop" 
-                alt="Profissional Uniformizado" 
-                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-              />
-            </motion.div>
-
-            {/* Floating Card 1: Hidráulica */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute right-0 sm:-right-4 top-1/4 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-2.5 sm:p-4 rounded-xl shadow-2xl flex items-center gap-3 sm:gap-4 animate-float scale-90 sm:scale-100 origin-right"
-            >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                <Droplets size={16} className="text-blue-400 sm:w-6 sm:h-6" />
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-white font-bold font-display leading-tight text-sm sm:text-base">Hidráulica</p>
-                <p className="text-slate-300 text-xs text-nowrap">Vazamentos e Rede</p>
-              </div>
-            </motion.div>
-
-            {/* Floating Card 2: Elétrica */}
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="absolute left-0 sm:-left-6 bottom-1/3 z-20 bg-brand-dark/80 backdrop-blur-md border border-white/10 p-2.5 sm:p-4 rounded-xl shadow-2xl flex items-center gap-3 sm:gap-4 animate-float-delayed scale-90 sm:scale-100 origin-left"
-            >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
-                <Zap size={16} className="text-brand-accent-yellow sm:w-6 sm:h-6" />
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-white font-bold font-display leading-tight text-sm sm:text-base">Elétrica</p>
-                <p className="text-slate-300 text-xs text-nowrap">Reparos e Instalação</p>
-              </div>
+              {/* Professional Images Slider */}
+              {heroImages.map((img, idx) => (
+                <img 
+                  key={idx}
+                  src={img} 
+                  alt="Profissional Uniformizado" 
+                  referrerPolicy="no-referrer"
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 ${
+                    idx === heroImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                  }`}
+                />
+              ))}
             </motion.div>
 
             {/* Floating Badge: Emergência */}
@@ -457,10 +452,18 @@ export default function App() {
                 <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 font-display">{service.title}</h3>
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 flex-grow">{service.desc}</p>
                 
-                <a href={getServiceWppLink(service.title)} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 font-medium text-sm transition-colors mt-auto ${
-                  service.highlight ? "text-brand-accent-red hover:text-white" : "text-slate-300 group-hover:text-brand-neon"
-                }`}>
-                  Solicitar orçamento <ChevronRight size={16} />
+                <a 
+                  href={getServiceWppLink(service.title)} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={`w-full mt-auto px-4 py-3 text-white rounded-lg font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 relative z-20 hover:scale-[1.02] group-hover:-translate-y-1 ${
+                    service.highlight
+                      ? 'bg-red-600 hover:bg-green-500 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.4)]'
+                      : 'bg-brand-primary hover:bg-green-500 shadow-[0_0_20px_rgba(29,78,216,0.2)] hover:shadow-[0_0_30px_rgba(37,211,102,0.4)]'
+                  }`}
+                >
+                  <MessageCircle size={20} className="transition-transform group-hover:scale-110" />
+                  Solicitar orçamento
                 </a>
                 
                 {/* Hover Glow Effect */}
@@ -469,6 +472,42 @@ export default function App() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Trabalhos Feitos / Portfolio Section */}
+      <section className="py-20 overflow-hidden bg-black/60 border-b border-white/5 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] md:h-[500px] bg-brand-primary/5 blur-[80px] md:blur-[120px] pointer-events-none" />
+        
+        <div className="mb-8 sm:mb-12 text-center max-w-2xl mx-auto px-4 relative z-10">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 sm:mb-4 leading-tight">
+            Trabalhos Realizados
+          </h2>
+          <p className="text-slate-400 text-base sm:text-lg">
+            Confira alguns dos nossos projetos e reparos executados com excelência.
+          </p>
+        </div>
+
+        {/* Carousel Row 1 */}
+        <InfiniteSlider 
+          images={[
+            "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7",
+            "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI",
+            "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr",
+            "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA",
+            "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5"
+          ]} 
+        />
+
+        {/* Carousel Row 2 */}
+        <InfiniteSlider 
+          reverse
+          images={[
+            "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1",
+            "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam",
+            "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD",
+            "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx"
+          ]} 
+        />
       </section>
 
       {/* Trusted By / Partners Section */}
@@ -515,41 +554,6 @@ export default function App() {
             }
           `}</style>
         </div>
-      </section>
-
-      {/* Trabalhos Feitos / Portfolio Section */}
-      <section className="py-20 overflow-hidden bg-black/60 border-b border-white/5 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] md:h-[500px] bg-brand-primary/5 blur-[80px] md:blur-[120px] pointer-events-none" />
-        
-        <div className="mb-8 sm:mb-12 text-center max-w-2xl mx-auto px-4 relative z-10">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 sm:mb-4 leading-tight">
-            Trabalhos Realizados
-          </h2>
-          <p className="text-slate-400 text-base sm:text-lg">
-            Confira alguns dos nossos projetos e reparos executados com excelência.
-          </p>
-        </div>
-
-        {/* Carousel Row 1 */}
-        <InfiniteSlider 
-          images={[
-            "https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1540340061722-9293d5163008?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
-          ]} 
-        />
-
-        {/* Carousel Row 2 */}
-        <InfiniteSlider 
-          reverse
-          images={[
-            "https://images.unsplash.com/photo-1605810731057-013fa096aaef?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1621905252472-83e878563c63?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1416879590524-7f85a210b395?q=80&w=800&auto=format&fit=crop"
-          ]} 
-        />
       </section>
 
       {/* Differentials / Why Choose Us */}
