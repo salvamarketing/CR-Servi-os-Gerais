@@ -198,7 +198,7 @@ export default function App() {
   }, []);
 
   const WHATSAPP_NUMBER = "5554996224098";
-  const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Vim através do site da CR e preciso de atendimento emergencial.")}`;
+  const wppLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Estou vindo do site da CR e gostaria de conversar com vocês, podem me ajudar?")}`;
   const getServiceWppLink = (serviceName: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá! Vim através do site da CR e gostaria de solicitar um orçamento para o serviço de ${serviceName}.`)}`;
 
   return (
@@ -216,7 +216,7 @@ export default function App() {
           >
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
               <div className="flex items-center shrink-0 pointer-events-auto">
-                <Logo className="h-12 py-2 sm:py-0 sm:h-16 md:h-20 w-auto object-contain origin-left drop-shadow-xl" />
+                <Logo className="h-16 py-2 sm:py-0 sm:h-20 md:h-24 w-auto object-contain origin-left drop-shadow-xl" />
               </div>
 
               <div className="hidden md:flex items-center gap-8 text-sm font-medium bg-brand-dark/95 backdrop-blur-md border border-white/10 rounded-full shadow-2xl px-8 h-12 sm:h-14 pointer-events-auto">
@@ -375,7 +375,7 @@ export default function App() {
       </section>
 
       {/* Marquee Divider - 24/7 Urgency Banner */}
-      <div className="bg-brand-accent-red py-4 relative overflow-hidden flex items-center rotate-1 scale-110 z-30 shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+      <div className="bg-brand-accent-red py-4 relative overflow-hidden flex items-center z-30 shadow-[0_0_30px_rgba(239,68,68,0.3)]">
         <div className="flex whitespace-nowrap animate-marquee">
           {/* We repeat the content to create a seamless infinite loop */}
           {[...Array(10)].map((_, i) => (
@@ -388,6 +388,76 @@ export default function App() {
           ))}
         </div>
       </div>
+
+      {/* Differentials / Why Choose Us */}
+      <section id="diferenciais" className="py-16 md:py-24 px-4 relative overflow-hidden">
+        {/* Wireframe background elements */}
+        <div className="absolute -left-64 top-0 w-[500px] h-[500px] border border-white/5 rounded-full" />
+        <div className="absolute -left-32 top-32 w-[500px] h-[500px] border border-white/5 rounded-full" />
+
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row gap-16 items-center">
+          <div className="lg:w-1/2">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
+              Por que escolher a <br className="hidden sm:block"/>
+              <span className="text-brand-neon">CR Serviços Gerais?</span>
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg mb-8 sm:mb-12 max-w-lg leading-relaxed">
+              Não entregamos apenas serviços, entregamos segurança para sua família e para o seu negócio. 
+              Garantia registrada e suporte contínuo.
+            </p>
+
+            <div className="space-y-6">
+              {[
+                { title: "Atendimento Rápido", sub: "Equipes posicionadas estrategicamente." },
+                { title: "Profissionais Capacitados", sub: "Técnicos uniformizados e identificados." },
+                { title: "Serviço Garantido", sub: "Garantia em contrato para sua segurança." },
+                { title: "Residencial e Comercial", sub: "Estrutura para projetos de qualquer porte." },
+                { title: "Equipamentos de Ponta", sub: "Tecnologia para diagnósticos precisos." },
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="mt-1 w-6 h-6 rounded-full bg-brand-neon/20 border border-brand-neon/50 flex items-center justify-center shrink-0">
+                    <CheckCircle2 size={12} className="text-brand-neon" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-lg">{item.title}</h4>
+                    <p className="text-slate-400">{item.sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="lg:w-1/2 w-full p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
+            
+            <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Precisa de ajuda agora?</h3>
+            
+            <div className="space-y-4 flex flex-col items-center">
+              <a 
+                href={wppLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full max-w-md px-6 py-4 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1"
+              >
+                <MessageCircle size={24} />
+                Chamar no WhatsApp
+              </a>
+              
+              <a 
+                href="tel:5554996224098"
+                className="w-full max-w-md px-6 py-4 sm:py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
+              >
+                <Phone size={24} />
+                Ligar Agora (24h)
+              </a>
+
+              <p className="text-slate-400 mt-6 text-center text-sm">
+                Orçamento gratuito pelo WhatsApp.<br/> Resposta imediata.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Services Grid Section */}
       <section id="servicos" className="py-24 px-4 bg-black/40 border-y border-white/5 relative mt-4">
@@ -540,7 +610,7 @@ export default function App() {
             ].map((partner, i) => (
               <div 
                 key={i} 
-                className="shrink-0 relative group w-32 h-20 sm:w-40 sm:h-24 bg-white rounded-xl flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-[1.10] hover:shadow-[0_0_40px_rgba(0,229,255,0.2)] hover:z-20 transition-all duration-300 select-none p-4"
+                className="shrink-0 relative group w-32 h-20 sm:w-40 sm:h-24 bg-white rounded-xl flex items-center justify-center hover:scale-[1.10] hover:shadow-[0_0_40px_rgba(0,229,255,0.2)] hover:z-20 transition-all duration-300 select-none p-4"
               >
                 <div className="absolute inset-0 bg-brand-neon/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md pointer-events-none" />
                 <img src={partner.logo} alt={partner.name} draggable="false" className="relative z-10 max-w-full max-h-full object-contain drop-shadow-sm pointer-events-none" />
@@ -553,48 +623,9 @@ export default function App() {
               display: none;
             }
           `}</style>
-        </div>
-      </section>
 
-      {/* Differentials / Why Choose Us */}
-      <section id="diferenciais" className="py-16 md:py-24 px-4 relative overflow-hidden">
-        {/* Wireframe background elements */}
-        <div className="absolute -left-64 top-0 w-[500px] h-[500px] border border-white/5 rounded-full" />
-        <div className="absolute -left-32 top-32 w-[500px] h-[500px] border border-white/5 rounded-full" />
-
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row gap-16 items-center">
-          <div className="lg:w-1/2">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
-              Por que escolher a <br className="hidden sm:block"/>
-              <span className="text-brand-neon">CR Serviços Gerais?</span>
-            </h2>
-            <p className="text-slate-400 text-base sm:text-lg mb-8 sm:mb-12 max-w-lg leading-relaxed">
-              Não entregamos apenas serviços, entregamos segurança para sua família e para o seu negócio. 
-              Garantia registrada e suporte contínuo.
-            </p>
-
-            <div className="space-y-6">
-              {[
-                { title: "Atendimento Rápido", sub: "Equipes posicionadas estrategicamente." },
-                { title: "Profissionais Capacitados", sub: "Técnicos uniformizados e identificados." },
-                { title: "Serviço Garantido", sub: "Garantia em contrato para sua segurança." },
-                { title: "Residencial e Comercial", sub: "Estrutura para projetos de qualquer porte." },
-                { title: "Equipamentos de Ponta", sub: "Tecnologia para diagnósticos precisos." },
-              ].map((item, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-brand-neon/20 border border-brand-neon/50 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={12} className="text-brand-neon" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-bold text-lg">{item.title}</h4>
-                    <p className="text-slate-400">{item.sub}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="lg:w-1/2 w-full p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative">
+          {/* Duplicated Help Card */}
+          <div className="max-w-xl mx-auto mt-16 p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative text-left">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
             
             <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Precisa de ajuda agora?</h3>
@@ -631,7 +662,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 mb-12">
           <div className="flex flex-col items-start">
             <div className="mb-4 sm:mb-6 w-full">
-              <Logo className="h-10 sm:h-16 w-auto object-contain drop-shadow-md origin-left scale-110 sm:scale-100" />
+              <Logo className="h-16 sm:h-24 w-auto object-contain drop-shadow-md origin-left scale-110 sm:scale-100" />
             </div>
             <p className="text-slate-400 max-w-sm text-sm sm:text-base leading-relaxed">
               Sua equipe de confiança para manutenções elétricas e hidráulicas. Atendimento premium e garantia de qualidade.
