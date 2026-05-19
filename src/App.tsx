@@ -278,13 +278,13 @@ export default function App() {
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
               Problemas Hidráulicos ou <br className="hidden md:block"/> Elétricos? <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow inline-block mt-1 sm:mt-2">
-                Resolvemos Hoje Mesmo.
+                Resolvemos antes que piore.
               </span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed">
-              Equipe especializada em encanamento, manutenção e elétrica com atendimento 
-              <strong className="text-white font-medium"> rápido, profissional e emergencial</strong>.
+              Evite dores de cabeça com reformas indesejadas. Mande uma mensagem e nossa equipe 
+              <strong className="text-white font-medium"> especializada chegará rápido para resolver o problema na raiz</strong>. O fim da dor de cabeça.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
@@ -295,7 +295,7 @@ export default function App() {
                 className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-brand-primary hover:bg-green-500 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(29,78,216,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] group hover:-translate-y-1"
               >
                 <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
-                Chamar no WhatsApp
+                Falar com um Técnico Agora
               </a>
               
               <a 
@@ -303,28 +303,34 @@ export default function App() {
                 className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm hover:-translate-y-1"
               >
                 <PhoneCall size={20} />
-                Solicitar Atendimento
+                Orçamento Grátis e Rápido
               </a>
             </div>
 
             <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-4 md:mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
+                  {[1,2,3,4,5].map(i => (
                     <div key={i} className="w-8 h-8 rounded-full border-2 border-brand-dark bg-slate-800 flex items-center justify-center">
                       <Star size={12} className="text-brand-accent-yellow fill-brand-accent-yellow" />
                     </div>
                   ))}
                 </div>
                 <div className="flex flex-col ml-2">
-                  <span className="text-sm font-bold text-white">4.9/5</span>
-                  <span className="text-xs text-slate-400">+500 clientes</span>
+                  <span className="text-sm font-bold text-white">5.0/5</span>
+                  <span className="text-xs text-slate-400">+2.500 avaliações</span>
                 </div>
               </div>
               <div className="w-px h-8 bg-white/10 hidden sm:block"></div>
-              <div className="flex items-center gap-2 text-sm">
-                <CheckCircle2 size={16} className="text-brand-neon" />
-                <span>Chegada em até 40 min</span>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 size={16} className="text-brand-neon" />
+                  <span>Chegada rápida no local</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <ShieldCheck size={16} className="text-brand-neon" />
+                  <span>Garantia de 90 dias Documentada</span>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -395,24 +401,29 @@ export default function App() {
         <div className="absolute -left-64 top-0 w-[500px] h-[500px] border border-white/5 rounded-full" />
         <div className="absolute -left-32 top-32 w-[500px] h-[500px] border border-white/5 rounded-full" />
 
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row gap-16 items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row gap-16 items-center"
+        >
           <div className="lg:w-1/2">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
-              Por que escolher a <br className="hidden sm:block"/>
-              <span className="text-brand-neon">CR Serviços Gerais?</span>
+              A tranquilidade que <br className="hidden sm:block"/>
+              <span className="text-brand-neon">você merece.</span>
             </h2>
             <p className="text-slate-400 text-base sm:text-lg mb-8 sm:mb-12 max-w-lg leading-relaxed">
-              Não entregamos apenas serviços, entregamos segurança para sua família e para o seu negócio. 
-              Garantia registrada e suporte contínuo.
+              Sabemos o estresse que um vazamento ou pane elétrica causa. Não entregamos apenas serviços, 
+              entregamos a segurança de que o problema será resolvido definitivamente, sem dor de cabeça.
             </p>
 
             <div className="space-y-6">
               {[
-                { title: "Atendimento Rápido", sub: "Equipes posicionadas estrategicamente." },
-                { title: "Profissionais Capacitados", sub: "Técnicos uniformizados e identificados." },
-                { title: "Serviço Garantido", sub: "Garantia em contrato para sua segurança." },
-                { title: "Residencial e Comercial", sub: "Estrutura para projetos de qualquer porte." },
-                { title: "Equipamentos de Ponta", sub: "Tecnologia para diagnósticos precisos." },
+                { title: "Chegada Rápida (Até 40 min)", sub: "Chega de esperar o dia todo. Tratamos sua urgência como prioridade." },
+                { title: "Especialistas Fardados", sub: "Segurança total de quem entra na sua casa ou empresa." },
+                { title: "Garantia 100% Documentada", sub: "Sem surpresas. Se o problema voltar, nós também voltamos. De graça." },
+                { title: "Orçamento Transparente", sub: "Diagnóstico claro e preço justo aprovado antes de iniciarmos." }
               ].map((item, idx) => (
                 <div key={idx} className="flex gap-4">
                   <div className="mt-1 w-6 h-6 rounded-full bg-brand-neon/20 border border-brand-neon/50 flex items-center justify-center shrink-0">
@@ -430,7 +441,7 @@ export default function App() {
           <div className="lg:w-1/2 w-full p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
             
-            <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Precisa de ajuda agora?</h3>
+            <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Fale direto com o técnico de plantão</h3>
             
             <div className="space-y-4 flex flex-col items-center">
               <a 
@@ -440,7 +451,7 @@ export default function App() {
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1"
               >
                 <MessageCircle size={24} />
-                Chamar no WhatsApp
+                Iniciar Diagnóstico Grátis
               </a>
               
               <a 
@@ -448,20 +459,27 @@ export default function App() {
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
               >
                 <Phone size={24} />
-                Ligar Agora (24h)
+                Ligar Agora (Atendimento 24h)
               </a>
 
               <p className="text-slate-400 mt-6 text-center text-sm">
-                Orçamento gratuito pelo WhatsApp.<br/> Resposta imediata.
+                Sem robôs. Atendimento humano, transparente e <br/>
+                <strong className="text-white">especializado em poucos segundos.</strong>
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Services Grid Section */}
       <section id="servicos" className="py-24 px-4 bg-black/40 border-y border-white/5 relative mt-4">
-        <div className="max-w-7xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto"
+        >
           <div className="mb-12 sm:mb-16 text-center max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
               Nossas Especialidades
@@ -541,12 +559,18 @@ export default function App() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Trabalhos Feitos / Portfolio Section */}
       <section className="py-20 overflow-hidden bg-black/60 border-b border-white/5 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] md:h-[500px] bg-brand-primary/5 blur-[80px] md:blur-[120px] pointer-events-none" />
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] md:h-[500px] bg-brand-primary/5 blur-[80px] md:blur-[120px] pointer-events-none" />
         
         <div className="mb-8 sm:mb-12 text-center max-w-2xl mx-auto px-4 relative z-10">
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 sm:mb-4 leading-tight">
@@ -578,11 +602,18 @@ export default function App() {
             "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx"
           ]} 
         />
+        </motion.div>
       </section>
 
       {/* Trusted By / Partners Section */}
       <section className="py-12 md:py-16 px-4 bg-brand-dark relative z-10">
-        <div className="max-w-7xl mx-auto text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto text-center"
+        >
           <h3 className="text-sm md:text-base font-bold text-slate-500 uppercase tracking-widest mb-8 md:mb-12">
             Empresas que confiam na CR
           </h3>
@@ -628,7 +659,7 @@ export default function App() {
           <div className="max-w-xl mx-auto mt-16 p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative text-left">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
             
-            <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Precisa de ajuda agora?</h3>
+            <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center text-balance">Problema não listado? Fale com nosso técnico agora.</h3>
             
             <div className="space-y-4 flex flex-col items-center">
               <a 
@@ -638,7 +669,7 @@ export default function App() {
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1"
               >
                 <MessageCircle size={24} />
-                Chamar no WhatsApp
+                Explicar meu problema no WhatsApp
               </a>
               
               <a 
@@ -646,41 +677,42 @@ export default function App() {
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
               >
                 <Phone size={24} />
-                Ligar Agora (24h)
+                Ligar Agora (Atendimento 24h)
               </a>
 
               <p className="text-slate-400 mt-6 text-center text-sm">
-                Orçamento gratuito pelo WhatsApp.<br/> Resposta imediata.
+                Fale diretamente com um especialista e tire todas <br/>
+                as suas dúvidas <strong>sem nenhum compromisso.</strong>
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-white/5 bg-[#0a0f16] pt-16 pb-8 px-4 sm:pt-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 mb-12">
-          <div className="flex flex-col items-start">
-            <div className="mb-4 sm:mb-6 w-full">
-              <Logo className="h-16 sm:h-24 w-auto object-contain drop-shadow-md origin-left scale-110 sm:scale-100" />
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-12 md:gap-16 mb-12">
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:col-span-2 lg:col-span-1">
+            <div className="mb-4 sm:mb-6 w-full flex justify-center sm:justify-start">
+              <Logo className="h-16 sm:h-24 w-auto object-contain drop-shadow-md origin-center sm:origin-left scale-110 sm:scale-100" />
             </div>
             <p className="text-slate-400 max-w-sm text-sm sm:text-base leading-relaxed">
               Sua equipe de confiança para manutenções elétricas e hidráulicas. Atendimento premium e garantia de qualidade.
             </p>
           </div>
           
-          <div>
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <h4 className="text-white font-bold mb-6 font-display text-lg">Links Rápidos</h4>
-            <div className="flex flex-col gap-4 text-slate-400">
+            <div className="flex flex-col gap-4 text-slate-400 items-center sm:items-start">
               <a href="#servicos" className="hover:text-brand-neon transition-colors w-fit">Nossos Serviços</a>
               <a href="#diferenciais" className="hover:text-brand-neon transition-colors w-fit">Por que nos escolher?</a>
               <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-neon transition-colors w-fit">Solicitar Orçamento</a>
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <h4 className="text-white font-bold mb-6 font-display text-lg">Contato 24 Horas</h4>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 items-center sm:items-start">
               <div className="flex items-center gap-3 text-slate-300">
                 <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center shrink-0">
                   <MessageCircle size={20} className="text-[#25D366]" />
