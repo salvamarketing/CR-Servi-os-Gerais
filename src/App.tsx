@@ -94,6 +94,7 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
     <div 
       ref={containerRef}
       className={`flex overflow-x-hidden cursor-grab active:cursor-grabbing w-full select-none relative z-10 mb-4 sm:mb-6 ${isDragging ? '' : 'transition-none'}`}
+      style={{ touchAction: 'pan-y' }}
       onMouseEnter={() => setIsInteracting(true)}
       onMouseLeave={() => { setIsInteracting(false); setIsDragging(false); }}
       onMouseDown={(e) => handleDragStart(e.pageX)}
@@ -262,27 +263,45 @@ export default function App() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section id="inicio" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 overflow-hidden">
+      <section id="inicio" className="relative pt-28 pb-16 md:pt-36 md:pb-32 px-4 min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-brand-primary/20 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-brand-neon/10 blur-[60px] md:blur-[100px] rounded-full pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
+        {/* Animated Background Slider (Right side) */}
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] z-0 pointer-events-none"
+             style={{ WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 40%)', maskImage: 'linear-gradient(to right, transparent 0%, black 40%)' }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/60 to-transparent lg:via-brand-dark/20 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-brand-dark z-10" />
+          <div className="absolute inset-0 bg-brand-dark/40 lg:bg-brand-dark/20 z-10" />
+          {heroImages.map((img, idx) => (
+            <img 
+              key={idx}
+              src={img} 
+              alt="" 
+              referrerPolicy="no-referrer"
+              className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-[2s] ease-in-out ${
+                idx === heroImageIndex ? 'opacity-40 lg:opacity-60 z-0' : 'opacity-0 -z-10'
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto w-full relative z-20">
           
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-6 md:gap-8"
+            className="flex flex-col gap-6 md:gap-8 max-w-3xl lg:max-w-[65%]"
           >
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
-              Problemas Hidráulicos ou <br className="hidden md:block"/> Elétricos? <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow inline-block mt-1 sm:mt-2">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-display font-bold leading-[1.05] tracking-tight text-balance">
+              Problemas Hidráulicos ou Elétricos?
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow block mt-2 sm:mt-4">
                 Resolvemos antes que piore.
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed text-balance">
               Evite dores de cabeça com reformas indesejadas. Mande uma mensagem e nossa equipe 
               <strong className="text-white font-medium"> especializada chegará rápido para resolver o problema na raiz</strong>. O fim da dor de cabeça.
             </p>
@@ -335,48 +354,21 @@ export default function App() {
             </div>
           </motion.div>
 
-          <div className="relative lg:ml-auto w-full max-w-lg">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,102,255,0.2)] group z-10"
-            >
-              {/* Dark CSS overlay for cinematic effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent z-10" />
-              <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,102,255,0.4)] z-10 pointers-events-none mix-blend-overlay" />
-              
-              {/* Professional Images Slider */}
-              {heroImages.map((img, idx) => (
-                <img 
-                  key={idx}
-                  src={img} 
-                  alt="Profissional Uniformizado" 
-                  referrerPolicy="no-referrer"
-                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-[1.5s] ease-in-out ${
-                    idx === heroImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                  }`}
-                />
-              ))}
-            </motion.div>
-
-            {/* Floating Badge: Emergência */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="absolute -bottom-4 sm:-bottom-8 right-0 sm:right-8 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-2 sm:p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 flex items-center gap-2 sm:gap-4 animate-float-slow origin-bottom-right"
-            >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                <Clock size={16} className="text-white sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <p className="text-white font-bold font-display leading-tight text-xs sm:text-lg">Emergência 24h</p>
-                <p className="text-red-100 text-[10px] sm:text-sm font-medium">Equipe rápida</p>
-              </div>
-            </motion.div>
-          </div>
-
+          {/* Floating Badge: Emergência */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="hidden lg:flex absolute bottom-8 right-8 xl:right-0 z-20 bg-gradient-to-r from-brand-accent-red to-red-600 p-4 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-400/30 items-center gap-4 animate-float-slow origin-bottom-right"
+          >
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+              <Clock size={24} className="text-white" />
+            </div>
+            <div>
+              <p className="text-white font-bold font-display leading-tight text-lg">Emergência 24h</p>
+              <p className="text-red-100 text-sm font-medium">Equipe rápida</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -409,7 +401,7 @@ export default function App() {
           className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row gap-16 items-center"
         >
           <div className="lg:w-1/2">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight text-balance">
               A tranquilidade que <br className="hidden sm:block"/>
               <span className="text-brand-neon">você merece.</span>
             </h2>
@@ -438,7 +430,7 @@ export default function App() {
             </div>
           </div>
           
-          <div className="lg:w-1/2 w-full p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative">
+          <div className="lg:w-1/2 w-full p-6 sm:p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
             
             <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center">Fale direto com o técnico de plantão</h3>
@@ -481,7 +473,7 @@ export default function App() {
           className="max-w-7xl mx-auto"
         >
           <div className="mb-12 sm:mb-16 text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight text-balance">
               Nossas Especialidades
             </h2>
             <p className="text-slate-400 text-base sm:text-lg">
@@ -573,7 +565,7 @@ export default function App() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] md:h-[500px] bg-brand-primary/5 blur-[80px] md:blur-[120px] pointer-events-none" />
         
         <div className="mb-8 sm:mb-12 text-center max-w-2xl mx-auto px-4 relative z-10">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 sm:mb-4 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 sm:mb-4 leading-tight text-balance">
             Trabalhos Realizados
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
@@ -656,7 +648,7 @@ export default function App() {
           `}</style>
 
           {/* Duplicated Help Card */}
-          <div className="max-w-xl mx-auto mt-16 p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative text-left">
+          <div className="max-w-xl mx-auto mt-16 p-6 sm:p-8 md:p-12 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-sm shadow-2xl relative text-left">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/30 blur-[50px] rounded-full pointer-events-none" />
             
             <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-6 sm:mb-8 text-center text-balance">Problema não listado? Fale com nosso técnico agora.</h3>
