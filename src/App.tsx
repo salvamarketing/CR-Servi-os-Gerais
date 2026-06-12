@@ -121,6 +121,7 @@ export default function App() {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   const heroImages = [
+    "https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf",
     "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7",
     "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI",
     "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr",
@@ -133,11 +134,15 @@ export default function App() {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    let timeout: NodeJS.Timeout;
+    const duration = heroImageIndex === 0 ? 2000 : 5000;
+    
+    timeout = setTimeout(() => {
       setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [heroImages.length]);
+    }, duration);
+
+    return () => clearTimeout(timeout);
+  }, [heroImageIndex, heroImages.length]);
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -273,17 +278,22 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/60 to-transparent lg:via-brand-dark/20 z-10" />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-brand-dark z-10" />
           <div className="absolute inset-0 bg-brand-dark/40 lg:bg-brand-dark/20 z-10" />
-          {heroImages.map((img, idx) => (
-            <img 
-              key={idx}
-              src={img} 
-              alt="" 
-              referrerPolicy="no-referrer"
-              className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-[2s] ease-in-out ${
-                idx === heroImageIndex ? 'opacity-40 lg:opacity-60 z-0' : 'opacity-0 -z-10'
-              }`}
-            />
-          ))}
+          
+          <div className="absolute inset-0">
+            {heroImages.map((img, idx) => (
+              <img 
+                key={idx}
+                src={img} 
+                alt="" 
+                referrerPolicy="no-referrer"
+                className={`absolute inset-0 w-full h-full transition-all duration-[3s] ease-in-out ${
+                  idx === 0 ? 'object-cover object-right md:object-right-bottom' : 'object-cover object-center'
+                } ${
+                  idx === heroImageIndex ? 'opacity-40 lg:opacity-60 z-0 scale-100' : 'opacity-0 -z-10 scale-105'
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="max-w-7xl mx-auto w-full relative z-20">
@@ -292,11 +302,11 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-6 md:gap-8 max-w-3xl lg:max-w-[65%]"
+            className="flex flex-col gap-5 sm:gap-6 md:gap-8 max-w-xl lg:max-w-[55%]"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-display font-bold leading-[1.05] tracking-tight text-balance">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-[1.1] tracking-tight text-balance">
               Problemas Hidráulicos ou Elétricos?
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow block mt-2 sm:mt-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-neon to-brand-primary animate-glow block mt-1 sm:mt-2">
                 Resolvemos antes que piore.
               </span>
             </h1>
