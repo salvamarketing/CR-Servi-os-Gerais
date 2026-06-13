@@ -326,14 +326,6 @@ export default function App() {
                 <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
                 Falar com um Técnico Agora
               </a>
-              
-              <a 
-                href="tel:5554996224098"
-                className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm hover:-translate-y-1"
-              >
-                <PhoneCall size={20} />
-                Orçamento Grátis e Rápido
-              </a>
             </div>
 
             <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-4 md:mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
