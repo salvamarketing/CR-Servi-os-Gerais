@@ -11,22 +11,24 @@ import {
   Phone,
   ShieldCheck,
   Star,
-  ChevronRight,
   MessageCircle,
-  PhoneCall,
   Activity,
   CheckCircle2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import React, { useState, useEffect, useRef } from "react";
 
-const Logo = ({ className }: { className?: string }) => {
+const Logo = ({ className, loading = "eager" }: { className?: string; loading?: "eager" | "lazy" }) => {
   return (
     <img 
-      src="https://lh3.googleusercontent.com/d/12zHTTLV23znUCD0QmdLPlaJw7KwXx6xC" 
+      src="https://lh3.googleusercontent.com/d/12zHTTLV23znUCD0QmdLPlaJw7KwXx6xC=w400-rw" 
       alt="CR Serviços Gerais" 
+      width={200}
+      height={60}
       className={className}
       referrerPolicy="no-referrer"
+      loading={loading}
+      decoding="async"
     />
   );
 };
@@ -39,8 +41,24 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { rootMargin: "250px" }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
     let animationFrameId: number;
     let lastTime = performance.now();
     const speed = 0.06; // pixels per ms
@@ -69,7 +87,7 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
 
     animationFrameId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isInteracting, isDragging, reverse]);
+  }, [isVisible, isInteracting, isDragging, reverse]);
 
   const handleDragStart = (clientX: number) => {
     if (!containerRef.current) return;
@@ -104,10 +122,21 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
       onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
       onTouchEnd={handleDragEnd}
     >
-      {[...Array(4)].map((_, i) => (
+      {[...Array(3)].map((_, i) => (
         <div key={i} ref={i === 0 ? setRef : null} className="flex gap-4 sm:gap-6 shrink-0 pr-4 sm:pr-6">
           {images.map((src, j) => (
-            <img key={j} src={src} draggable={false} alt="Trabalho Realizado" referrerPolicy="no-referrer" className="w-[280px] h-[220px] sm:w-[400px] sm:h-[300px] md:w-[500px] md:h-[380px] shrink-0 object-cover rounded-xl sm:rounded-2xl shadow-xl pointer-events-none" />
+            <img 
+              key={j} 
+              src={src} 
+              draggable={false} 
+              alt="Trabalho de manutenção realizado pela CR Serviços Gerais" 
+              referrerPolicy="no-referrer" 
+              loading="lazy"
+              decoding="async"
+              width={500}
+              height={380}
+              className="w-[280px] h-[220px] sm:w-[400px] sm:h-[300px] md:w-[500px] md:h-[380px] shrink-0 object-cover rounded-xl sm:rounded-2xl shadow-xl pointer-events-none" 
+            />
           ))}
         </div>
       ))}
@@ -119,29 +148,39 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
+  const [loadedSlideIndices, setLoadedSlideIndices] = useState<number[]>([0]);
 
   const heroImages = [
-    "https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf",
-    "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7",
-    "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI",
-    "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr",
-    "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA",
-    "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5",
-    "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1",
-    "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam",
-    "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD",
-    "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx"
+    "https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1000-rw",
+    "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7=w800-rw",
+    "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI=w800-rw",
+    "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr=w800-rw",
+    "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA=w800-rw",
+    "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5=w800-rw",
+    "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1=w800-rw",
+    "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam=w800-rw",
+    "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD=w800-rw",
+    "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx=w800-rw"
   ];
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const duration = heroImageIndex === 0 ? 2000 : 5000;
+    const duration = heroImageIndex === 0 ? 5000 : 5000;
     
     timeout = setTimeout(() => {
       setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
     }, duration);
 
     return () => clearTimeout(timeout);
+  }, [heroImageIndex, heroImages.length]);
+
+  useEffect(() => {
+    const nextIndex = (heroImageIndex + 1) % heroImages.length;
+    setLoadedSlideIndices(prev => {
+      if (prev.includes(heroImageIndex) && prev.includes(nextIndex)) return prev;
+      const set = new Set([...prev, heroImageIndex, nextIndex]);
+      return Array.from(set);
+    });
   }, [heroImageIndex, heroImages.length]);
 
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -238,10 +277,11 @@ export default function App() {
                 href={wppLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Falar conosco no WhatsApp"
                 className="group relative px-3 sm:px-6 py-2 sm:py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 overflow-hidden shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] text-xs sm:text-sm shrink-0 pointer-events-auto"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                <MessageCircle size={16} className="relative z-10 sm:w-[18px] sm:h-[18px]" />
+                <MessageCircle size={16} className="relative z-10 sm:w-[18px] sm:h-[18px]" aria-hidden="true" />
                 <span className="relative z-10">WhatsApp</span>
               </a>
             </div>
@@ -259,7 +299,7 @@ export default function App() {
               <a href="#servicos" className="text-[11px] sm:text-sm font-medium hover:text-brand-neon transition-colors whitespace-nowrap">Serviços</a>
               <a href="#diferenciais" className="text-[11px] sm:text-sm font-medium hover:text-brand-neon transition-colors whitespace-nowrap">Diferenciais</a>
               <div className="hidden sm:flex items-center gap-2 text-brand-neon text-sm font-medium whitespace-nowrap">
-                <Clock size={16} />
+                <Clock size={16} aria-hidden="true" />
                 <span>Plantão 24h</span>
               </div>
             </div>
@@ -280,19 +320,29 @@ export default function App() {
           <div className="absolute inset-0 bg-brand-dark/40 lg:bg-brand-dark/20 z-10" />
           
           <div className="absolute inset-0">
-            {heroImages.map((img, idx) => (
-              <img 
-                key={idx}
-                src={img} 
-                alt="" 
-                referrerPolicy="no-referrer"
-                className={`absolute inset-0 w-full h-full transition-all duration-[3s] ease-in-out ${
-                  idx === 0 ? 'object-cover object-right md:object-right-bottom' : 'object-cover object-center'
-                } ${
-                  idx === heroImageIndex ? 'opacity-40 lg:opacity-60 z-0 scale-100' : 'opacity-0 -z-10 scale-105'
-                }`}
-              />
-            ))}
+            {heroImages.map((img, idx) => {
+              if (!loadedSlideIndices.includes(idx)) return null;
+              return (
+                <img 
+                  key={idx}
+                  src={img} 
+                  srcSet={idx === 0 ? "https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w600-rw 600w, https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1000-rw 1000w, https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1400-rw 1400w" : undefined}
+                  sizes={idx === 0 ? "(max-width: 768px) 100vw, 65vw" : undefined}
+                  alt={idx === 0 ? "CR Serviços Gerais - Eletricista e Encanador 24h" : "Trabalhos de manutenção da CR Serviços"} 
+                  referrerPolicy="no-referrer"
+                  fetchPriority={idx === 0 ? "high" : "low"}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  width={1000}
+                  height={750}
+                  className={`absolute inset-0 w-full h-full transition-all duration-[3s] ease-in-out ${
+                    idx === 0 ? 'object-cover object-right md:object-right-bottom' : 'object-cover object-center'
+                  } ${
+                    idx === heroImageIndex ? 'opacity-40 lg:opacity-60 z-0 scale-100' : 'opacity-0 -z-10 scale-105'
+                  }`}
+                />
+              );
+            })}
           </div>
         </div>
 
@@ -321,16 +371,17 @@ export default function App() {
                 href={wppLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Falar com um técnico especialista agora pelo WhatsApp"
                 className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-brand-primary hover:bg-green-500 text-white rounded-lg font-medium text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(29,78,216,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] group hover:-translate-y-1"
               >
-                <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
+                <MessageCircle size={24} className="group-hover:scale-110 transition-transform" aria-hidden="true" />
                 Falar com um Técnico Agora
               </a>
             </div>
 
-            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-4 md:mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-4 md:mt-8 p-4 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm" aria-label="Avaliação dos clientes: 5.0 estrelas">
               <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
+                <div className="flex -space-x-2" aria-hidden="true">
                   {[1,2,3,4,5].map(i => (
                     <div key={i} className="w-8 h-8 rounded-full border-2 border-brand-dark bg-slate-800 flex items-center justify-center">
                       <Star size={12} className="text-brand-accent-yellow fill-brand-accent-yellow" />
@@ -345,11 +396,11 @@ export default function App() {
               <div className="w-px h-8 bg-white/10 hidden sm:block"></div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 size={16} className="text-brand-neon" />
+                  <CheckCircle2 size={16} className="text-brand-neon" aria-hidden="true" />
                   <span>Chegada rápida no local</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <ShieldCheck size={16} className="text-brand-neon" />
+                  <ShieldCheck size={16} className="text-brand-neon" aria-hidden="true" />
                   <span>Garantia de 90 dias Documentada</span>
                 </div>
               </div>
@@ -424,7 +475,7 @@ export default function App() {
                     <CheckCircle2 size={12} className="text-brand-neon" />
                   </div>
                   <div>
-                    <h4 className="text-white font-bold text-lg">{item.title}</h4>
+                    <h3 className="text-white font-bold text-lg">{item.title}</h3>
                     <p className="text-slate-400">{item.sub}</p>
                   </div>
                 </div>
@@ -442,17 +493,19 @@ export default function App() {
                 href={wppLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Iniciar diagnóstico grátis pelo WhatsApp"
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1"
               >
-                <MessageCircle size={24} />
+                <MessageCircle size={24} aria-hidden="true" />
                 Iniciar Diagnóstico Grátis
               </a>
               
               <a 
                 href="tel:5554996224098"
+                aria-label="Ligar para o atendimento 24 horas no telefone (54) 99622-4098"
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
               >
-                <Phone size={24} />
+                <Phone size={24} aria-hidden="true" />
                 Ligar Agora (Atendimento 24h)
               </a>
 
@@ -538,13 +591,14 @@ export default function App() {
                   href={getServiceWppLink(service.title)} 
                   target="_blank" 
                   rel="noopener noreferrer" 
+                  aria-label={`Solicitar orçamento para ${service.title} no WhatsApp`}
                   className={`w-full mt-auto px-4 py-3 text-white rounded-lg font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 relative z-20 hover:scale-[1.02] group-hover:-translate-y-1 ${
                     service.highlight
                       ? 'bg-red-600 hover:bg-green-500 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.4)]'
                       : 'bg-brand-primary hover:bg-green-500 shadow-[0_0_20px_rgba(29,78,216,0.2)] hover:shadow-[0_0_30px_rgba(37,211,102,0.4)]'
                   }`}
                 >
-                  <MessageCircle size={20} className="transition-transform group-hover:scale-110" />
+                  <MessageCircle size={20} className="transition-transform group-hover:scale-110" aria-hidden="true" />
                   Solicitar orçamento
                 </a>
                 
@@ -578,11 +632,11 @@ export default function App() {
         {/* Carousel Row 1 */}
         <InfiniteSlider 
           images={[
-            "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7",
-            "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI",
-            "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr",
-            "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA",
-            "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5"
+            "https://lh3.googleusercontent.com/d/1xQfX0aIbb-TeZkaJlH4UOVEA1xgYRJr7=w600-rw",
+            "https://lh3.googleusercontent.com/d/1-_FOO4SAmMOiOeSG60NVpYsjm-Cqh9OI=w600-rw",
+            "https://lh3.googleusercontent.com/d/1KK1l4uZCWFFSsOBRDawPbN2hgeJKu1xr=w600-rw",
+            "https://lh3.googleusercontent.com/d/1ddaYXo-_1Bj5TxZPKCGu5ebrIvLxuqHA=w600-rw",
+            "https://lh3.googleusercontent.com/d/1Y5UVWWx4vCjhw2fdtoi-PmPfuo0avSu5=w600-rw"
           ]} 
         />
 
@@ -590,10 +644,10 @@ export default function App() {
         <InfiniteSlider 
           reverse
           images={[
-            "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1",
-            "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam",
-            "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD",
-            "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx"
+            "https://lh3.googleusercontent.com/d/1Jt5NTrcfkV60HkTGdtbbKFAVeRD6s0n1=w600-rw",
+            "https://lh3.googleusercontent.com/d/1sAi7MK06SohC43sVr27QCFWtEQVpbiam=w600-rw",
+            "https://lh3.googleusercontent.com/d/1TFXvSkg6ZIelJFzmmE-QqB5iG4yxGoyD=w600-rw",
+            "https://lh3.googleusercontent.com/d/1ZgUNW2pu71tTdfqYUVXJEpTtHKDtHODx=w600-rw"
           ]} 
         />
         </motion.div>
@@ -608,7 +662,7 @@ export default function App() {
           transition={{ duration: 0.7 }}
           className="max-w-7xl mx-auto text-center"
         >
-          <h3 className="text-sm md:text-base font-bold text-slate-500 uppercase tracking-widest mb-8 md:mb-12">
+          <h3 className="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest mb-8 md:mb-12">
             Empresas que confiam na CR
           </h3>
           <div 
@@ -638,7 +692,16 @@ export default function App() {
                 className="shrink-0 relative group w-32 h-20 sm:w-40 sm:h-24 bg-white rounded-xl flex items-center justify-center hover:scale-[1.10] hover:shadow-[0_0_40px_rgba(0,229,255,0.2)] hover:z-20 transition-all duration-300 select-none p-4"
               >
                 <div className="absolute inset-0 bg-brand-neon/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md pointer-events-none" />
-                <img src={partner.logo} alt={partner.name} draggable="false" className="relative z-10 max-w-full max-h-full object-contain drop-shadow-sm pointer-events-none" />
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name} 
+                  draggable="false" 
+                  loading="lazy"
+                  decoding="async"
+                  width={140}
+                  height={60}
+                  className="relative z-10 max-w-full max-h-full object-contain drop-shadow-sm pointer-events-none" 
+                />
               </div>
             ))}
             <div className="shrink-0 w-2 md:w-8" />
@@ -660,17 +723,19 @@ export default function App() {
                 href={wppLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Explicar meu problema no WhatsApp"
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1"
               >
-                <MessageCircle size={24} />
+                <MessageCircle size={24} aria-hidden="true" />
                 Explicar meu problema no WhatsApp
               </a>
               
               <a 
                 href="tel:5554996224098"
+                aria-label="Ligar para o atendimento 24 horas no telefone (54) 99622-4098"
                 className="w-full max-w-md px-6 py-4 sm:py-5 bg-brand-primary hover:bg-blue-600 text-white rounded-xl font-bold text-base sm:text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/40 hover:-translate-y-1"
               >
-                <Phone size={24} />
+                <Phone size={24} aria-hidden="true" />
                 Ligar Agora (Atendimento 24h)
               </a>
 
@@ -688,7 +753,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-12 md:gap-16 mb-12">
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:col-span-2 lg:col-span-1">
             <div className="mb-4 sm:mb-6 w-full flex justify-center sm:justify-start">
-              <Logo className="h-16 sm:h-24 w-auto object-contain drop-shadow-md origin-center sm:origin-left scale-110 sm:scale-100" />
+              <Logo loading="lazy" className="h-16 sm:h-24 w-auto object-contain drop-shadow-md origin-center sm:origin-left scale-110 sm:scale-100" />
             </div>
             <p className="text-slate-400 max-w-sm text-sm sm:text-base leading-relaxed">
               Sua equipe de confiança para manutenções elétricas e hidráulicas. Atendimento premium e garantia de qualidade.
@@ -696,7 +761,7 @@ export default function App() {
           </div>
           
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-            <h4 className="text-white font-bold mb-6 font-display text-lg">Links Rápidos</h4>
+            <h3 className="text-white font-bold mb-6 font-display text-lg">Links Rápidos</h3>
             <div className="flex flex-col gap-4 text-slate-400 items-center sm:items-start">
               <a href="#servicos" className="hover:text-brand-neon transition-colors w-fit">Nossos Serviços</a>
               <a href="#diferenciais" className="hover:text-brand-neon transition-colors w-fit">Por que nos escolher?</a>
@@ -705,23 +770,23 @@ export default function App() {
           </div>
 
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-            <h4 className="text-white font-bold mb-6 font-display text-lg">Contato 24 Horas</h4>
+            <h3 className="text-white font-bold mb-6 font-display text-lg">Contato 24 Horas</h3>
             <div className="flex flex-col gap-5 items-center sm:items-start">
               <div className="flex items-center gap-3 text-slate-300">
                 <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center shrink-0">
-                  <MessageCircle size={20} className="text-[#25D366]" />
+                  <MessageCircle size={20} className="text-[#25D366]" aria-hidden="true" />
                 </div>
-                <a href={wppLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
+                <a href={wppLink} target="_blank" rel="noopener noreferrer" aria-label="Chamar no WhatsApp no número (54) 99622-4098" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center shrink-0">
-                  <Phone size={20} className="text-brand-primary" />
+                  <Phone size={20} className="text-brand-primary" aria-hidden="true" />
                 </div>
-                <a href="tel:5554996224098" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
+                <a href="tel:5554996224098" aria-label="Ligar para o telefone (54) 99622-4098" className="hover:text-white transition-colors text-base sm:text-lg">(54) 99622-4098</a>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <div className="w-10 h-10 rounded-full bg-brand-neon/10 flex items-center justify-center shrink-0">
-                  <Clock size={20} className="text-brand-neon" />
+                  <Clock size={20} className="text-brand-neon" aria-hidden="true" />
                 </div>
                 <span className="text-base sm:text-lg">Atendimento 24h / 7 dias</span>
               </div>
@@ -729,7 +794,7 @@ export default function App() {
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 text-center md:text-left">
+        <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400 text-center md:text-left">
           <p>© {new Date().getFullYear()} CR Serviços Gerais. Todos os direitos reservados.</p>
           <p>Feito para alta performance e conversão.</p>
         </div>
