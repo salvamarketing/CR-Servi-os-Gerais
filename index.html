@@ -63,12 +63,8 @@
       fetchpriority="high" 
     />
 
-    <!-- Non-blocking font loading -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" media="print" onload="this.media='all'" />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" />
-    </noscript>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" />
 
     <style>
       body {
@@ -80,26 +76,23 @@
       }
     </style>
 
-    <!-- Meta Pixel Code (Deferred to avoid blocking initial render and LCP) -->
+    <!-- Meta Pixel Code -->
     <script>
-    function loadPixel() {
-      if (window.pixelLoaded) return;
-      window.pixelLoaded = true;
+    try {
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
       n.queue=[];t=b.createElement(e);t.async=!0;
       t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      if(s && s.parentNode){s.parentNode.insertBefore(t,s)}else{b.head.appendChild(t)}}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1165602758960948');
-      fbq('track', 'PageView');
-    }
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(loadPixel, { timeout: 2500 });
-    } else {
-      window.addEventListener('load', function() { setTimeout(loadPixel, 200); });
+      if(window.fbq){
+        fbq('init', '1165602758960948');
+        fbq('track', 'PageView');
+      }
+    } catch (e) {
+      console.warn('Pixel initialization bypassed:', e);
     }
     </script>
     <!-- End Meta Pixel Code -->

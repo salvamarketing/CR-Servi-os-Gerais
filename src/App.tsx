@@ -41,20 +41,24 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting);
-        });
-      },
-      { rootMargin: "250px" }
-    );
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
+    if (!containerRef.current || typeof IntersectionObserver === 'undefined') return;
+    try {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            setIsVisible(entry.isIntersecting);
+          });
+        },
+        { rootMargin: "250px" }
+      );
+      observer.observe(containerRef.current);
+      return () => observer.disconnect();
+    } catch {
+      setIsVisible(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -164,7 +168,7 @@ export default function App() {
   ];
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
     const duration = heroImageIndex === 0 ? 5000 : 5000;
     
     timeout = setTimeout(() => {
