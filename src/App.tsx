@@ -41,10 +41,13 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (!containerRef.current || typeof IntersectionObserver === 'undefined') return;
+    if (!containerRef.current || typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return;
+    }
     try {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -52,7 +55,7 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
             setIsVisible(entry.isIntersecting);
           });
         },
-        { rootMargin: "250px" }
+        { rootMargin: "300px" }
       );
       observer.observe(containerRef.current);
       return () => observer.disconnect();
@@ -66,23 +69,34 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
     let animationFrameId: number;
     let lastTime = performance.now();
     const speed = 0.06; // pixels per ms
+    let cachedSetWidth = setRef.current ? setRef.current.offsetWidth : 0;
+
+    const onResize = () => {
+      if (setRef.current) {
+        cachedSetWidth = setRef.current.offsetWidth;
+      }
+    };
+    window.addEventListener("resize", onResize, { passive: true });
 
     const scroll = (time: number) => {
       const delta = Math.min(time - lastTime, 50);
       lastTime = time;
 
-      if (containerRef.current && setRef.current && !isInteracting && !isDragging) {
-        const setWidth = setRef.current.offsetWidth;
-        
-        if (reverse) {
-          containerRef.current.scrollLeft -= speed * delta;
-          if (containerRef.current.scrollLeft <= 0) {
-            containerRef.current.scrollLeft += setWidth;
-          }
-        } else {
-          containerRef.current.scrollLeft += speed * delta;
-          if (containerRef.current.scrollLeft >= setWidth) {
-            containerRef.current.scrollLeft -= setWidth;
+      if (containerRef.current && !isInteracting && !isDragging) {
+        if (cachedSetWidth === 0 && setRef.current) {
+          cachedSetWidth = setRef.current.offsetWidth;
+        }
+        if (cachedSetWidth > 0) {
+          if (reverse) {
+            containerRef.current.scrollLeft -= speed * delta;
+            if (containerRef.current.scrollLeft <= 0) {
+              containerRef.current.scrollLeft += cachedSetWidth;
+            }
+          } else {
+            containerRef.current.scrollLeft += speed * delta;
+            if (containerRef.current.scrollLeft >= cachedSetWidth) {
+              containerRef.current.scrollLeft -= cachedSetWidth;
+            }
           }
         }
       }
@@ -90,7 +104,10 @@ const InfiniteSlider = ({ images, reverse = false }: { images: string[], reverse
     };
 
     animationFrameId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", onResize);
+    };
   }, [isVisible, isInteracting, isDragging, reverse]);
 
   const handleDragStart = (clientX: number) => {
@@ -213,10 +230,17 @@ export default function App() {
   };
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

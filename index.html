@@ -48,16 +48,20 @@
     }
     </script>
 
-    <!-- Preconnect to high-priority external origins -->
+    <!-- Preconnect & DNS Prefetch to high-priority external origins -->
     <link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin />
+    <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
     <!-- LCP Preload: Responsive high-priority WebP preload for the main hero image -->
     <link 
       rel="preload" 
       as="image" 
-      href="https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w600-rw" 
+      href="https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1000-rw" 
       imagesrcset="https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w600-rw 600w, https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1000-rw 1000w, https://lh3.googleusercontent.com/d/1DMI97_5rBYLS24eYL8od3slurWKPn_Tf=w1400-rw 1400w" 
       imagesizes="(max-width: 768px) 100vw, 65vw" 
       fetchpriority="high" 
@@ -78,21 +82,36 @@
 
     <!-- Meta Pixel Code -->
     <script>
-    try {
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      if(s && s.parentNode){s.parentNode.insertBefore(t,s)}else{b.head.appendChild(t)}}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      if(window.fbq){
-        fbq('init', '1165602758960948');
-        fbq('track', 'PageView');
+    function loadMetaPixel() {
+      if (window._metaPixelLoaded) return;
+      window._metaPixelLoaded = true;
+      try {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        if(s && s.parentNode){s.parentNode.insertBefore(t,s)}else{b.head.appendChild(t)}}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        if(window.fbq){
+          fbq('init', '1165602758960948');
+          fbq('track', 'PageView');
+        }
+      } catch (e) {
+        console.warn('Pixel initialization bypassed:', e);
       }
-    } catch (e) {
-      console.warn('Pixel initialization bypassed:', e);
+    }
+    if (document.readyState === 'complete') {
+      setTimeout(loadMetaPixel, 50);
+    } else {
+      window.addEventListener('load', function() {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadMetaPixel, { timeout: 2000 });
+        } else {
+          setTimeout(loadMetaPixel, 200);
+        }
+      });
     }
     </script>
     <!-- End Meta Pixel Code -->

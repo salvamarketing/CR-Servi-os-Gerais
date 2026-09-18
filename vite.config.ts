@@ -24,6 +24,11 @@ export default defineConfig(({mode}) => {
       target: 'es2022',
       cssMinify: true,
       minify: 'esbuild',
+      chunkSizeWarningLimit: 1000,
+    },
+    esbuild: {
+      legalComments: 'none',
+      drop: mode === 'production' ? ['debugger'] : [],
     },
   };
 });
